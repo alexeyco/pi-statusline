@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <!-- window -->
+  <rect x="100" y="80" width="1400" height="828" rx="16" fill="#0a0d12" stroke="#30363d" stroke-width="2"/>
+
+  <!-- titlebar -->
+  <path d="M 100 96 a 16 16 0 0 1 16 -16 h 1368 a 16 16 0 0 1 16 16 v 44 h -1400 z" fill="#1c2128"/>
+  <circle cx="144" cy="110" r="9" fill="#ff5f57"/>
+  <circle cx="176" cy="110" r="9" fill="#febc2e"/>
+  <circle cx="208" cy="110" r="9" fill="#28c840"/>
+  <text x="800" y="120" text-anchor="middle" font-family="Menlo, Monaco, monospace" font-size="24" fill="#8b949e">pi -zsh</text>
+
+  <g font-family="Menlo, Monaco, monospace" font-size="30">
+    <!-- prompt -->
+    <text x="156" y="196" fill="#7ee787">❯</text>
+    <text x="196" y="196" fill="#e6edf3">pi</text>
+
+    <!-- user request -->
+    <text x="156" y="252" fill="#8b949e">›</text>
+    <text x="196" y="252" fill="#e6edf3">extract the statusline extension into a package</text>
+
+    <!-- answer -->
+    <text x="156" y="316" fill="#e6edf3">Moved the model label to the editor border and kept the</text>
+    <text x="156" y="360" fill="#e6edf3">footer to a single line. <tspan fill="#8b949e">Ready to publish.</tspan></text>
+
+    <!-- editor with labeled top border -->
+    <rect x="156" y="430" width="1288" height="170" fill="none" stroke="#30363d" stroke-width="2"/>
+    <rect x="1114" y="418" width="288" height="24" fill="#0a0d12"/>
+    <text x="1258" y="438" text-anchor="middle" fill="#8b949e">glm-5.3 • high</text>
+    <text x="180" y="505" fill="#8b949e">›</text>
+    <rect x="224" y="481" width="18" height="34" fill="#7ee787"/>
+
+    <!-- footer: single line, cwd left / stats right -->
+    <text x="156" y="650" fill="#8b949e">pi-statusline (master) • extract</text>
+    <text x="1444" y="650" text-anchor="end"><tspan fill="#8b949e">↑12k ↓4k · </tspan><tspan fill="#ffa657">78.4%/200k</tspan></text>
+
+    <!-- extension status line -->
+    <text x="156" y="690" fill="#8b949e">tea: fetching issues…</text>
+  </g>
+</svg>
