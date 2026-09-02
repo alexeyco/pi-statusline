@@ -1,4 +1,4 @@
-# pi-statusline
+# @alexeyco/pi-statusline
 
 Compact statusline for the [pi](https://pi.dev) coding agent — published as a pi extension package.
 
