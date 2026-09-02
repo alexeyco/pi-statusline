@@ -19,7 +19,7 @@ Relocates status information in the pi TUI:
 pi install npm:@alexeyco/pi-statusline
 ```
 
-Requires pi ≥ 0.84 (peer dependencies are resolved by `pi install`).
+Requires pi ≥ 0.76 (peer dependencies are `*` and resolved by `pi install`).
 The extension activates automatically on session start.
 
 **Migrating from a local copy:** if you previously kept this extension in
