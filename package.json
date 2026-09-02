@@ -1,6 +1,6 @@
 {
   "name": "@alexeyco/pi-statusline",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Compact statusline for the pi coding agent — model/thinking on the editor border, single-line footer with token totals and context usage",
   "type": "module",
   "license": "MIT",

@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.1.0
+## 0.1.1
+
+- README: heading renamed to the published package name (`@alexeyco/pi-statusline`),
+  minimum pi version corrected to ≥ 0.76 (peer dependencies are `*`).
 
 - Initial release: compact statusline — `model • thinking` label on the
   editor top border, single-line footer with cwd/branch/session on the left
