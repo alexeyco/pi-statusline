@@ -1,7 +1,7 @@
 {
   "name": "@alexeyco/pi-statusline",
-  "version": "0.1.1",
-  "description": "Compact statusline for the pi coding agent — model/thinking on the editor border, single-line footer with token totals and context usage",
+  "version": "0.2.0",
+  "description": "Compact footer for the pi coding agent — model/thinking and context usage on the left, MCP server count on the right, extension statuses below",
   "type": "module",
   "license": "MIT",
   "keywords": [
@@ -32,9 +32,9 @@
     "@earendil-works/pi-tui": "*"
   },
   "devDependencies": {
-    "@earendil-works/pi-ai": "^0.84.4",
-    "@earendil-works/pi-coding-agent": "^0.84.4",
-    "@earendil-works/pi-tui": "^0.84.4",
+    "@earendil-works/pi-ai": "^1.0.2",
+    "@earendil-works/pi-coding-agent": "^1.0.2",
+    "@earendil-works/pi-tui": "^1.0.2",
     "@types/node": "^26.0.0",
     "typescript": "^5.9.0"
   },
