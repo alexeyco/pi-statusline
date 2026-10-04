@@ -16,24 +16,19 @@
 
     <!-- user request -->
     <text x="156" y="252" fill="#8b949e">›</text>
-    <text x="196" y="252" fill="#e6edf3">extract the statusline extension into a package</text>
+    <text x="196" y="252" fill="#e6edf3">replace the statusline with the footer I actually run</text>
 
     <!-- answer -->
-    <text x="156" y="316" fill="#e6edf3">Moved the model label to the editor border and kept the</text>
-    <text x="156" y="360" fill="#e6edf3">footer to a single line. <tspan fill="#8b949e">Ready to publish.</tspan></text>
+    <text x="156" y="316" fill="#e6edf3">Removed the border label and token totals; MCP count</text>
+    <text x="156" y="360" fill="#e6edf3">moved to the right. <tspan fill="#8b949e">Ready to publish.</tspan></text>
 
-    <!-- editor with labeled top border -->
-    <rect x="156" y="430" width="1288" height="170" fill="none" stroke="#30363d" stroke-width="2"/>
-    <rect x="1114" y="418" width="288" height="24" fill="#0a0d12"/>
-    <text x="1258" y="438" text-anchor="middle" fill="#8b949e">glm-5.3 • high</text>
-    <text x="180" y="505" fill="#8b949e">›</text>
-    <rect x="224" y="481" width="18" height="34" fill="#7ee787"/>
+    <!-- editor, pinned to the window bottom -->
+    <rect x="156" y="648" width="1288" height="170" fill="none" stroke="#30363d" stroke-width="2"/>
+    <text x="180" y="723" fill="#8b949e">›</text>
+    <rect x="224" y="699" width="18" height="34" fill="#7ee787"/>
 
-    <!-- footer: single line, cwd left / stats right -->
-    <text x="156" y="650" fill="#8b949e">pi-statusline (master) • extract</text>
-    <text x="1444" y="650" text-anchor="end"><tspan fill="#8b949e">↑12k ↓4k · </tspan><tspan fill="#ffa657">78.4%/200k</tspan></text>
-
-    <!-- extension status line -->
-    <text x="156" y="690" fill="#8b949e">tea: fetching issues…</text>
+    <!-- footer: model • thinking • context left / MCP count right -->
+    <text x="156" y="868"><tspan fill="#8b949e">qwen3.8-max • high • </tspan><tspan fill="#ffa657">78.4%/200k</tspan></text>
+    <text x="1444" y="868" text-anchor="end" fill="#8b949e">MCP: 2</text>
   </g>
 </svg>

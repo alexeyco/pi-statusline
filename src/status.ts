@@ -7,8 +7,6 @@
  * computed here stay valid after coloring.
  */
 
-import { isAbsolute, relative, resolve, sep } from "node:path";
-
 /** Drop a trailing ".0" so "1.0k" reads as "1k" (9999 → "10.0k" → "10k"). */
 function trimDecimal(s: string): string {
   return s.replace(/\.0/, "");
@@ -20,54 +18,35 @@ export function formatTokens(count: number): string {
   if (count < 1000) return String(count);
   if (count < 10000) return trimDecimal(`${(count / 1000).toFixed(1)}k`);
   if (count < 1000000) return `${Math.round(count / 1000)}k`;
-  if (count < 10000000)
-    return trimDecimal(`${(count / 1000000).toFixed(1)}M`);
+  if (count < 10000000) return trimDecimal(`${(count / 1000000).toFixed(1)}M`);
   return `${Math.round(count / 1000000)}M`;
 }
 
-/** Replace the $HOME prefix with "~" (like a shell prompt). Paths outside
- *  $HOME and undefined home are returned unchanged. */
-export function formatCwd(cwd: string, home: string | undefined): string {
-  if (!home) return cwd;
-
-  const resolvedCwd = resolve(cwd);
-  const resolvedHome = resolve(home);
-  const rel = relative(resolvedHome, resolvedCwd);
-  const isInsideHome =
-    rel === "" ||
-    (rel !== ".." && !rel.startsWith(`..${sep}`) && !isAbsolute(rel));
-
-  if (!isInsideHome) return cwd;
-  return rel === "" ? "~" : `~${sep}${rel}`;
-}
-
-/** "model • thinking" label for the editor top border, mirroring the
- *  built-in footer semantics: plain model id without reasoning support,
- *  "• thinking off"/"• <level>" when the model can reason. */
-export function modelLabelText(
-  model: { id?: string; reasoning?: boolean } | undefined,
+/** "model • level" label for the footer, matching the reference footer
+ *  semantics: always "<id> • <level>", with level falling back to "off"
+ *  and model id to "no-model". */
+export function modelThinkingLabel(
+  model: { id?: string } | undefined,
   level: string | undefined,
 ): string {
   const name = model?.id ?? "no-model";
-
-  if (model?.reasoning) {
-    const thinking = level ?? "off";
-    return thinking === "off"
-      ? `${name} • thinking off`
-      : `${name} • ${thinking}`;
-  }
-
-  return name;
+  const thinking = level ?? "off";
+  return `${name} • ${thinking}`;
 }
 
-/** Context usage text: "42.1%/200k". Percent is null right after compaction
- *  (tokens unknown until the next LLM response) → "?/200k". */
+/** Context usage text. When contextWindow is 0 (unknown), returns "?" if
+ *  percent is also unknown, or "<pct>%" when percent is known. Otherwise
+ *  returns "<pct>%/<window>" (e.g. "42.1%/200k"). Percent is null right
+ *  after compaction (tokens unknown until the next LLM response). */
 export function contextDisplay(
   percent: number | null | undefined,
   contextWindow: number,
 ): string {
   const percentText =
     percent === null || percent === undefined ? "?" : `${percent.toFixed(1)}%`;
+  if (contextWindow === 0) {
+    return percent === null || percent === undefined ? "?" : `${percentText}`;
+  }
   return `${percentText}/${formatTokens(contextWindow)}`;
 }
 

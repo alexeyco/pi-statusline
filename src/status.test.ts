@@ -11,9 +11,8 @@ import {
   contextDisplay,
   contextTone,
   footerLine,
-  formatCwd,
   formatTokens,
-  modelLabelText,
+  modelThinkingLabel,
   sanitizeStatusText,
 } from "./status.ts";
 
@@ -29,43 +28,24 @@ test("formatTokens: magnitudes and boundaries", () => {
   assert.equal(formatTokens(25000000), "25M");
 });
 
-test("formatCwd: home → ~, outside home unchanged", () => {
-  const home = "/Users/tester";
-  assert.equal(formatCwd("/Users/tester/proj/sub", home), "~/proj/sub");
-  assert.equal(formatCwd("/Users/tester", home), "~");
-  assert.equal(formatCwd("/tmp/scratch", home), "/tmp/scratch");
-  assert.equal(formatCwd("/Users/testerish/x", home), "/Users/testerish/x"); // prefix, not a child
-  assert.equal(
-    formatCwd("/Users/tester/proj", undefined),
-    "/Users/tester/proj",
-  );
-});
-
-test("modelLabelText: reasoning on/off, no reasoning, no model", () => {
-  assert.equal(modelLabelText(undefined, "high"), "no-model");
-  assert.equal(
-    modelLabelText({ id: "gpt-x", reasoning: false }, "high"),
-    "gpt-x",
-  );
-  assert.equal(
-    modelLabelText({ id: "claude", reasoning: true }, "high"),
-    "claude • high",
-  );
-  assert.equal(
-    modelLabelText({ id: "claude", reasoning: true }, "off"),
-    "claude • thinking off",
-  );
-  assert.equal(
-    modelLabelText({ id: "claude", reasoning: true }, undefined),
-    "claude • thinking off",
-  );
+test("modelThinkingLabel: always shows level, falls back to off/no-model", () => {
+  assert.equal(modelThinkingLabel(undefined, "high"), "no-model • high");
+  assert.equal(modelThinkingLabel({ id: "gpt-x" }, undefined), "gpt-x • off");
+  assert.equal(modelThinkingLabel({ id: "claude" }, "high"), "claude • high");
+  assert.equal(modelThinkingLabel({ id: "claude" }, "off"), "claude • off");
+  assert.equal(modelThinkingLabel(undefined, undefined), "no-model • off");
 });
 
 test("contextDisplay: percent and unknown-after-compaction", () => {
   assert.equal(contextDisplay(42.13, 200000), "42.1%/200k");
   assert.equal(contextDisplay(7, 1000000), "7.0%/1M");
   assert.equal(contextDisplay(null, 200000), "?/200k");
-  assert.equal(contextDisplay(undefined, 0), "?/0");
+});
+
+test("contextDisplay: contextWindow 0 (unknown)", () => {
+  assert.equal(contextDisplay(null, 0), "?");
+  assert.equal(contextDisplay(undefined, 0), "?");
+  assert.equal(contextDisplay(42.1, 0), "42.1%");
 });
 
 test("contextTone: thresholds at 70% and 90%", () => {
@@ -83,29 +63,47 @@ test("sanitizeStatusText: single clean line", () => {
 });
 
 test("footerLine: both sides fit — right-aligned", () => {
-  const l = footerLine("~/dotfiles (main)", "↑12k ↓4k · 42%/200k", 40);
-  assert.equal(l.left, "~/dotfiles (main)");
-  assert.equal(l.right, "↑12k ↓4k · 42%/200k");
-  assert.equal(l.left.length + l.gap + l.right.length, 40);
+  const l = footerLine("claude • high • 42.1%/200k", "MCP: 3", 60);
+  assert.equal(l.left, "claude • high • 42.1%/200k");
+  assert.equal(l.right, "MCP: 3");
+  assert.equal(l.left.length + l.gap + l.right.length, 60);
 });
 
-test("footerLine: tight — left truncated with ellipsis, stats intact", () => {
-  const l = footerLine("~/some/very/long/path/here", "↑12k ↓4k · 42%/200k", 30);
-  assert.ok(l.right.startsWith("↑12k"), "stats must survive");
+test("footerLine: tight — left truncated with ellipsis, MCP intact", () => {
+  const l = footerLine("claude • high • 42.1%/200k", "MCP: 3", 20);
+  assert.equal(l.right, "MCP: 3");
   assert.ok(l.left.endsWith("..."));
-  assert.ok(l.left.length + l.gap + l.right.length <= 30);
+  assert.ok(l.left.length + l.gap + l.right.length <= 20);
 });
 
 test("footerLine: degenerate widths never exceed width", () => {
   for (const width of [0, 1, 5, 12]) {
-    const l = footerLine(
-      "~/dotfiles (main) • session",
-      "↑12k ↓4k · 42%/200k",
-      width,
-    );
+    const l = footerLine("claude • high • 42.1%/200k", "MCP: 3", width);
     assert.ok(
       l.left.length + l.gap + l.right.length <= width,
       `width=${width}`,
     );
   }
+});
+
+test("footerLine: minPad controls minimum gap between sides", () => {
+  // width=30, left=10, right=10, minPad=5 → both fit, gap = 30-10-10 = 10
+  const l1 = footerLine("0123456789", "0123456789", 30, 5);
+  assert.equal(l1.left, "0123456789");
+  assert.equal(l1.right, "0123456789");
+  assert.equal(l1.gap, 10);
+
+  // minPad=15 → doesn't fit (10+15+10=35 > 30), left truncated
+  const l2 = footerLine("0123456789", "0123456789", 30, 15);
+  assert.equal(l2.right, "0123456789");
+  assert.ok(l2.left.endsWith("..."));
+  assert.ok(l2.left.length + l2.gap + l2.right.length <= 30);
+});
+
+test("footerLine: right side alone exceeds width — left becomes empty", () => {
+  const l = footerLine("left", "this-right-side-is-very-long", 10);
+  assert.equal(l.left, "");
+  assert.equal(l.right, "this-right");
+  assert.equal(l.gap, 0);
+  assert.equal(l.right.length, 10);
 });

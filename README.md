@@ -4,9 +4,10 @@ Compact statusline for the [pi](https://pi.dev) coding agent — published as a 
 
 Relocates status information in the pi TUI:
 
-- **Editor border** — `model • thinking` label stamped on the top input border, right-aligned.
-- **Footer** — a single line: `cwd (branch) • session` on the left, `↑in ↓out · ctx%/window`
-  right-aligned. Context usage turns orange above 70% and red above 90%.
+- **Footer** — a single line: `model • thinking • ctx%/window` on the left,
+  `MCP: n` right-aligned. The MCP count is read from `~/.pi/agent/mcp.json`
+  and refreshes when MCP servers change. Context usage turns orange above
+  70% and red above 90%.
 - Extension statuses (`ctx.ui.setStatus`) keep their own line below.
 
 <p align="center">
